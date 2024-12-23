@@ -16,6 +16,12 @@ from time import sleep
 
 # usage: todo <text> "<description>" #<project> @<labels> !!<priority> %<time>
 
+def send_err(msg=""):
+    notification = Notification("Error", "something went wrong. Please retry.\n"+msg)
+    notification.send()
+    sleep(1)
+    notification.dismiss()
+
 class Plugin(PluginInstance, TriggerQueryHandler):
     def __init__(self):
         PluginInstance.__init__(self)
@@ -51,12 +57,14 @@ class Plugin(PluginInstance, TriggerQueryHandler):
             self.projects[0] = [x.id for x in self.projects_obj]
             self.projects[1] = [x.name for x in self.projects_obj]
         except Exception as error:
+            send_err(error)
             warning(error)
         try:
             self.labels_obj = self.api.get_labels()
             self.labels = []
             self.labels = [x.name for x in self.labels_obj]
         except Exception as error:
+            send_err(error)
             warning(error)
 
     def push_item(self, todo_string):
@@ -96,6 +104,7 @@ class Plugin(PluginInstance, TriggerQueryHandler):
                 self.api.add_project(name=project)
                 self.update_data()
             except Exception as error:
+                send_err(error)
                 warning(error)
         # check if labels exist
         for label in task_labels:
@@ -103,6 +112,7 @@ class Plugin(PluginInstance, TriggerQueryHandler):
                 try:
                     self.api.add_label(name=label)
                 except Exception as error:
+                    send_err(error)
                     warning(error)
         # send the task to your todoist
         try:
@@ -122,7 +132,7 @@ class Plugin(PluginInstance, TriggerQueryHandler):
             sleep(1)
             notification.dismiss()
         except Exception as error:
-            notification = Notification("Error", "something went wrong. You connection or the task's syntax could have been wrong. Please retry")
+            notification = Notification("Error", "something went wrong. Please retry")
             notification.send()
             sleep(1)
             notification.dismiss()
