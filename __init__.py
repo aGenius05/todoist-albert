@@ -71,7 +71,7 @@ class Plugin(PluginInstance, TriggerQueryHandler):
         self.update_data()
         # description
         try:
-            descr = re.findall("\".+\"", todo_string).pop().lstrip("\"").rstrip("\"")
+            descr = todo_string.split("\"")[1]
         except:
             descr = ""
         # project
@@ -87,7 +87,7 @@ class Plugin(PluginInstance, TriggerQueryHandler):
             prior = 1
         # date and time
         try:
-            time = re.findall("%.+$", todo_string).pop().lstrip("%")        
+            time = todo_string.split("%")[1]       
         except:
             time = ""
         # title
