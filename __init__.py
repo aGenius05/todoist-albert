@@ -12,8 +12,7 @@ md_lib_dependencies = "todoist-api-python"
 from todoist_api_python.api import TodoistAPI
 import os
 import re
-
-# TODO: send notification results
+from time import sleep
 
 # usage: todo <text> "<description>" #<project> @<labels> !!<priority> %<time>
 
@@ -118,7 +117,15 @@ class Plugin(PluginInstance, TriggerQueryHandler):
                 due_string=time,
                 due_lang=self._language,
             )
+            notification = Notification("Success", "Your task has been succesfully sent to your todoist")
+            notification.send()
+            sleep(1)
+            notification.dismiss()
         except Exception as error:
+            notification = Notification("Error", "something went wrong. You connection or the task's syntax could have been wrong. Please retry")
+            notification.send()
+            sleep(1)
+            notification.dismiss()
             warning(error)
 
     def handleTriggerQuery(self, query):
