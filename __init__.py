@@ -35,7 +35,6 @@ class Plugin(PluginInstance, TriggerQueryHandler):
         if self._token is not None:
             self.api = TodoistAPI(self._token)
         self._language = self.readConfig('todoist-langauge', str)
-        self.update_data()
 
     def update_token(self, token):
         self._token = token
