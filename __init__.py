@@ -126,15 +126,8 @@ class Plugin(PluginInstance, TriggerQueryHandler):
                 due_string=time,
                 due_lang=self._language,
             )
-            notification = Notification("Success", "Your task has been succesfully sent to your todoist")
-            notification.send()
-            sleep(1)
-            notification.dismiss()
         except Exception as error:
-            notification = Notification("Error", "something went wrong. Please retry")
-            notification.send()
-            sleep(1)
-            notification.dismiss()
+            send_err()
             warning(error)
 
     def handleTriggerQuery(self, query):
